@@ -32,7 +32,7 @@
   
   #upcoming th {
     text-align: left;
-    width: calc(40% - 20px);
+    width: calc(40% - 30px);
   }
   
   #upcoming tr {
@@ -52,15 +52,15 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: calc(30% - 20px);
+    width: calc(30% - 30px);
   }
   
   #upcoming.singleCourse th {
-    width: calc(70% - 20px);
+    width: calc(70% - 30px);
   }
   
   #upcoming.singleCourse td {
-    width: calc(30% - 20px);
+    width: calc(30% - 30px);
     text-align: right;
   }
   
@@ -79,15 +79,22 @@
     color: #227700;
   }
   
-  #upcoming tr.hidden {
+  #upcoming tr.hidden, #upcoming tr.overlimit {
     display: none;
   }
+    .overlimit{
+        display:none;
+    }
+    h2 span{
+        float:right; color:white; font-size:14px; line-height:1.46154em;
+    }
 
 </style>
 <div id="upcoming" class="d2l-widget d2l-htmlblock">
-  <h2 class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
-    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a>
+  <h2 id="upcomingHeader" class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
+    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a> <span>Show Hidden </span>
   </h2>
+
   <table id="upcomingTable">
     <tbody id="upcomingTbody"></tbody>
   </table>
