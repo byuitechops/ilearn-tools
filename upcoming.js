@@ -124,10 +124,18 @@ function showHidden(){
     hiddenElements.forEach(function (row){
     row.classList.remove("userHidden");
     })
+    updateHiddenCount();
 }
 
 function hideRow(rownum){
-    console.log("upcomingRow" + rownum);
-    console.log(document.querySelector("#upcomingRow" + rownum));
     document.querySelector("#upcomingRow" + rownum).classList.add("userHidden");
+    updateHiddenCount();
+}
+
+function updateHiddenCount(){
+var num = document.querySelectorAll(".userHidden").length;
+    document.getElementById("upcomingThead").classList.remove("hiddenMessage");
+    document.getElementById("userHiddenRows").textContent=": "+num;
+    if (num === 0)
+        document.getElementById("upcomingThead").classList.add("hiddenMessage");
 }

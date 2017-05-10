@@ -1,99 +1,127 @@
 <style>
-  #upcoming {
-    box-shadow: 0px 2px 2px 0px #e7e7e2;
-    border-radius: 3px;
-    background: #fff;
-  }
-  
-  #upcoming .myHeading {
-    background: #326ba9;
-    border-radius: 3px 3px 0 0;
-    margin: 0;
-    line-height: initial;
-    font-weight: inherit;
-  }
-  
-  #upcoming .myHeading a {
-    color: #fff;
-    font-size: .96em;
-  }
-  
-  #upcomingTable {
-    table-layout: fixed;
-    width: 100%;
-  }
-  
-  #upcomingTbody {
-    max-height: 450px;
-    overflow-y: auto;
-    display: block;
-    width: 100%;
-  }
-  
-  #upcoming th {
-    text-align: left;
-    width: calc(35% - 30px);
-  }
-
-      #upcoming th:first-child {
-    text-align: left;
-    width: calc(5% - 30px);
-  }
-  
-  #upcoming tr {
-    display: block;
-    width: 100%;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  #upcoming th,
-  #upcoming td {
-    display: inline-block;
-    padding: 3px 10px;
-    font-size: 1.1em;
-  }
-  
-
-  #upcoming td {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: calc(30% - 30px);
-  }
-
-  
-  #upcoming p {
-    font-size: .8em;
-    margin: 0;
-    padding: 2px 10px 3px;
-    color: #888;
-  }
-  
-  .late {
-    color: #aa0000;
-  }
-  
-  .available {
-    color: #227700;
-  }
-  
-  #upcoming tr.hidden, #upcoming tr.overlimit {
-    display: none;
-  }
-    .overlimit, .userHidden{
-        display:none;
+    #upcoming {
+        box-shadow: 0px 2px 2px 0px #e7e7e2;
+        border-radius: 3px;
+        background: #fff;
     }
-    h2 span{
-        float:right; color:white; font-size:14px; line-height:1.46154em;
+
+    #upcoming .myHeading {
+        background: #326ba9;
+        border-radius: 3px 3px 0 0;
+        margin: 0;
+        line-height: initial;
+        font-weight: inherit;
+    }
+
+    #upcoming .myHeading a {
+        color: #fff;
+        font-size: .96em;
+    }
+
+    #upcomingTable {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    #upcomingTbody {
+        max-height: 450px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+    }
+
+    #upcoming th {
+        text-align: left;
+        width: calc(35% - 30px);
+    }
+
+    #upcoming th:first-child {
+        text-align: left;
+        width: calc(5% - 30px);
+    }
+
+    #upcoming tr {
+        display: block;
+        width: 100%;
+        max-height: 30px;
+        /*arbitrary number*/
+        border-bottom: 1px solid #eaeaea;
+        transition: .5s;
+    }
+
+    #upcoming th,
+    #upcoming td {
+        display: inline-block;
+        padding: 3px 10px;
+        font-size: 1.1em;
+    }
+
+    #upcoming td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: calc(30% - 30px);
+    }
+
+    #upcoming p {
+        font-size: .8em;
+        margin: 0;
+        padding: 2px 10px 3px;
+        color: #888;
+    }
+
+    .late {
+        color: #aa0000;
+    }
+
+    .available {
+        color: #227700;
+    }
+
+    #upcoming tr#userHiddenMsg th, #upcomingTable thead {
+        width: calc(100% - 30px);
+        font-weight: bold;
+        text-align: center;
+        max-height:30px;
+    }
+
+    #upcoming tr.hidden,
+    #upcoming tr.overlimit {
+        display: none;
+    }
+
+    .overlimit {
+        display: none;
+    }
+
+    #upcoming tr.userHidden, .hiddenMessage {
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: visibility 0s .5s, opacity .25s linear, max-height 0.5s;
+    }
+
+    h2 span {
+        float: right;
+        color: white;
+        font-size: 14px;
+        line-height: 1.46154em;
     }
 
 </style>
 <div id="upcoming" class="d2l-widget d2l-htmlblock">
-  <h2 id="upcomingHeader" class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
-    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a> <span onclick='showHidden()'>Show Hidden </span>
+    <h2 id="upcomingHeader" class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
+    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a>
   </h2>
 
-  <table id="upcomingTable">
-    <tbody id="upcomingTbody"></tbody>
-  </table>
+    <table id="upcomingTable">
+        <thead id="upcomingThead" class="hiddenMessage">
+            <tr id="userHiddenMsg" >
+                <th colspan="4"><span onclick='showHidden()'>Expand Hidden Assignments<span id="userHiddenRows"></span></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="upcomingTbody"></tbody>
+    </table>
 </div>
