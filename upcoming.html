@@ -32,7 +32,12 @@
   
   #upcoming th {
     text-align: left;
-    width: calc(40% - 30px);
+    width: calc(35% - 30px);
+  }
+
+      #upcoming th:first-child {
+    text-align: left;
+    width: calc(5% - 30px);
   }
   
   #upcoming tr {
@@ -48,21 +53,14 @@
     font-size: 1.1em;
   }
   
+
   #upcoming td {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     width: calc(30% - 30px);
   }
-  
-  #upcoming.singleCourse th {
-    width: calc(70% - 30px);
-  }
-  
-  #upcoming.singleCourse td {
-    width: calc(30% - 30px);
-    text-align: right;
-  }
+
   
   #upcoming p {
     font-size: .8em;
@@ -82,7 +80,7 @@
   #upcoming tr.hidden, #upcoming tr.overlimit {
     display: none;
   }
-    .overlimit{
+    .overlimit, .userHidden{
         display:none;
     }
     h2 span{
@@ -92,7 +90,7 @@
 </style>
 <div id="upcoming" class="d2l-widget d2l-htmlblock">
   <h2 id="upcomingHeader" class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
-    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a> <span>Show Hidden </span>
+    <a href="https://byui.brightspace.com/d2l/le/calendar/6606">Upcoming Assignments</a> <span onclick='showHidden()'>Show Hidden </span>
   </h2>
 
   <table id="upcomingTable">

@@ -76,11 +76,12 @@ function getItems(classes) {
                     itemClass= "overlimit";
                     amountOverLimit++;
                 }
-                var itemRow = "<tr class=" + itemClass + "><th><a href=" + items.Objects[i].ItemUrl + " title='" + items.Objects[i].ItemName + "'>" + items.Objects[i].ItemName + "</a></th>" + getCourse(items.Objects[i].OrgUnitId, classes) + "<td>" + new Date(Date.parse(items.Objects[i].DueDate)).toLocaleString() + "</td></tr>";
+
+                var itemRow = "<tr id='upcomingRow" + i + "' class=" + itemClass + "><th onclick='hideRow("+i+")'> &ndash; </th><th><a href=" + items.Objects[i].ItemUrl + " title='" + items.Objects[i].ItemName + "'>" + items.Objects[i].ItemName + "</a></th>" + getCourse(items.Objects[i].OrgUnitId, classes) + "<td>" + new Date(Date.parse(items.Objects[i].DueDate)).toLocaleString() + "</td></tr>";
                 document.getElementById('upcomingTbody').insertAdjacentHTML('beforeend', itemRow)
             }
             if (amountOverLimit > 0){
-            document.getElementById('upcoming').insertAdjacentHTML('beforeend', "<p id='overLimitMsg'>" + (amountOverLimit) + " upcoming assignments hidden. <span onclick='unhideUpcoming()'>Click to display.</span></p>")}
+            document.getElementById('upcoming').insertAdjacentHTML('beforeend', "<p id='overLimitMsg' onclick='unhideUpcoming()'>" + (amountOverLimit) + " upcoming assignments hidden. Click to show all.</p>")}
             document.getElementById('upcoming').insertAdjacentHTML('beforeend', "<p>*Assignments more that one week overdue are ommited. Quizzes with unlimited attempts will not disappear after completion</p>")
         }
     }
@@ -116,4 +117,17 @@ function getEnrollments() {
         }
     }
     classesxhr.send();
+}
+
+function showHidden(){
+    var hiddenElements = document.querySelectorAll(".userHidden");
+    hiddenElements.forEach(function (row){
+    row.classList.remove("userHidden");
+    })
+}
+
+function hideRow(rownum){
+    console.log("upcomingRow" + rownum);
+    console.log(document.querySelector("#upcomingRow" + rownum));
+    document.querySelector("#upcomingRow" + rownum).classList.add("userHidden");
 }
