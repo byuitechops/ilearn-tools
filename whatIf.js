@@ -79,7 +79,7 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
 if (top.location.pathname.split('/')[4] == 'my_grades') {
 
   document.querySelector('form').style = "position: relative";
-  document.querySelector('form').insertAdjacentHTML('afterbegin', "<a id='whatif' class='dhdg_1 vui-heading-2' style='position: absolute; right: 0; font-size: 1.5em;' onclick=whatIf() href='#'>What if?</a>");
+  document.querySelector('form').insertAdjacentHTML('afterbegin', "<a id='whatif' class='dhdg_1 vui-heading-2' style='position: absolute; right: 0; font-size: 1.5em; background: #326ba9; color: #fff; padding: 8px 10px; border-radius: 5px;' onclick=whatIf() href='#'>What if?</a>");
 
   var windowUrl = chrome.extension.getURL('window.html');
   xhr = new XMLHttpRequest();
