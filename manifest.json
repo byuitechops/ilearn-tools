@@ -3,7 +3,7 @@
 
   "name": "I-Learn Tools",
   "description": "View upcoming assignments widget to the I-Learn homescreen, and use a what-if calculator in the gradebook.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "icons": {
     "16": "icon-16.png",
     "32": "icon-32.png",
