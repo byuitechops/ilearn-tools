@@ -123,84 +123,6 @@ function getItems(classes) {
   }
   itemsxhr.send();
 }
-/*make associative and get rid of this function!*/
-function isRecent(grade, d2l_grades) {
-  var courseId = grade.GradeObjectIdentifier;
-  var recent = true,
-    exists = false;
-  d2l_grades.forEach(function (gradeObj) {
-    if (gradeObj.id == courseId) {
-      exists = true;
-      var age = currDate - gradeObj.date;
-      recent = !(age > (100 * 60 * 60 * 24 * 2));
-    }
-  });
-  if (!exists) {
-    d2l_grades.push({
-      date: currDate.getTime(),
-      id: grade.GradeObjectIdentifier
-    });
-  }
-  return recent;
-}
-
-var gradeValues = [];
-
-function evaluateGrades(gradeValues) {
-  if (typeof (localStorage["d2l_grades"]) === 'undefined') {
-    localStorage['d2l_grades'] = "[]";
-  }
-  var d2l_grades = JSON.parse(localStorage['d2l_grades']);
-  var container = document.getElementById('gradesTbody');
-  gradeValues.forEach(function (course) {
-
-    var returnString;
-    var finalGrade = new XMLHttpRequest();
-    finalGrade.open("GET", "/d2l/api/le/1.18/" + course.Id + "/grades/final/values/myGradeValue", false);
-    finalGrade.onload = function () {
-      if (finalGrade.status == 200) {
-        var response = JSON.parse(finalGrade.response);
-        var gradePerc;
-        if (response.WeightedDenominator == null) {
-          gradePerc = Math.round(response.PointsNumerator / response.PointsDenominator * 100)
-        } else {
-          gradePerc = Math.round(response.WeightedNumerator / response.WeightedDenominator * 100)
-        }
-        returnString = "" + response.DisplayedGrade + " | " + gradePerc + "%";
-        return returnString;
-      }
-    }
-    finalGrade.send();
-
-    container.insertAdjacentHTML('beforeend', "<tr><th><a href='/d2l/lms/grades/my_grades/main.d2l?ou=" + course.Id + "'>" + course.name + "</a></th><th>" + returnString + "</th></tr>");
-    course.grades.forEach(function (grade) {
-      if (isRecent(grade, d2l_grades)) {
-        container.insertAdjacentHTML('beforeend', "<tr><td><a href='/d2l/lms/grades/my_grades/main.d2l?ou=" + course.Id + "'>" + grade.GradeObjectName + "</a></td><td>" + grade.DisplayedGrade + " | " + grade.PointsNumerator + "/" + grade.PointsDenominator + "</td></tr>");
-      }
-    });
-  })
-  localStorage["d2l_grades"] = JSON.stringify(d2l_grades);
-}
-
-function getGrades(courses) {
-  courses.forEach(function (course) {
-    var grades = new XMLHttpRequest();
-    grades.open("GET", "/d2l/api/le/1.15/" + course.Id + "/grades/values/myGradeValues/");
-    grades.onload = function () {
-      if (grades.status == 200) {
-        gradeValues.push({
-          name: course.Name,
-          Id: course.Id,
-          grades: JSON.parse(grades.response).reverse()
-        })
-        if (gradeValues.length == courses.length) {
-          evaluateGrades(gradeValues);
-        }
-      }
-    }
-    grades.send();
-  })
-}
 
 function getEnrollments() {
   var classesxhr = new XMLHttpRequest();
@@ -223,6 +145,27 @@ function getEnrollments() {
     }
   }
   classesxhr.send();
+}
+
+function getGrades() {
+  var grades = new XMLHttpRequest();
+  grades.open("GET", "/d2l/MiniBar/6606/ActivityFeed/GetAlerts?Category=1&_d2l_prc%24headingLevel=2&_d2l_prc%24scope=&_d2l_prc%24hasActiveForm=false&isXhr=true&requestId=3");
+  grades.onload = function () {
+    if (grades.status == 200) {
+      var response = JSON.parse(grades.response.substr(9))
+      var styles = ""
+      response.Data.CSS.forEach(function (each) {
+        styles += " " + each.Content + " ";
+      })
+      document.getElementById('gradesTbody').innerHTML = response.Payload.Html
+      document.getElementById('gradesTbody').insertAdjacentHTML('afterbegin', "<style>" + styles + "</style>")
+      document.querySelector('#gradesTbody .d2l-datalist-outdent').classList.remove('d2l-datalist-outdent')
+      document.querySelector('#gradesTbody ul').style = "padding: 0 10px;"
+      loadMore = document.querySelector('#gradesTbody a.d2l-loadmore-pager')
+      loadMore.parentElement.removeChild(loadMore)
+    }
+  }
+  grades.send();
 }
 
 function updateVisibility(ele) {
