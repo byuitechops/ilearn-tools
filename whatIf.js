@@ -1,18 +1,27 @@
 /*eslint-env browser*/
 /*global chrome*/
 var script;
+var daylight = document.querySelector('body').classList.contains('daylight');
 
 function executeOptions(removeWidgets, showOnCourse, showGrades) {
 
   if (typeof top.location.pathname.split('/')[3] === 'undefined') {
     if (removeWidgets) {
-
-      /* Delete redundant modules if you choose */
-      var courses = document.querySelectorAll('[title="Collapse My Courses"]')[1].parentElement.parentElement.parentElement.parentElement;
-      courses.parentElement.removeChild(courses)
-
-      var calendar = document.querySelectorAll('[title="Actions for Calendar"]')[0].parentElement.parentElement.parentElement
-      calendar.parentElement.removeChild(calendar)
+      console.log(removeWidgets)
+      var courses, calendar
+      if (daylight) {
+        calendar = document.querySelector('.homepage-col-4 .d2l-widget:nth-child(2)').parentElement.parentElement.parentElement.parentElement;
+        console.log(calendar)
+        calendar.parentElement.removeChild(calendar)
+      } else {
+        courses = document.querySelectorAll('[title="Collapse My Courses"]')[1].parentElement.parentElement.parentElement.parentElement;
+        calendar = document.querySelectorAll('[title="Actions for Calendar"]')[0].parentElement.parentElement.parentElement
+        console.log(courses)
+        console.log(calendar)
+        /* Delete redundant modules if you choose */
+        courses.parentElement.removeChild(courses)
+        calendar.parentElement.removeChild(calendar)
+      }
 
     }
 
@@ -22,20 +31,18 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
     upXhr.onload = function () {
       if (upXhr.status == 200) {
         var upcoming = upXhr.response;
-        document.querySelector('.d2l-homepage .d2l-box:nth-child(1)').insertAdjacentHTML('afterbegin', upcoming);
+        if (daylight) {
+          document.querySelector('.homepage-col-8').insertAdjacentHTML('afterbegin', upcoming);
+        } else {
+          document.querySelector('.d2l-homepage .d2l-box:nth-child(1)').insertAdjacentHTML('afterbegin', upcoming);
+        }
       }
     }
     upXhr.send();
 
-    /*Insert Script*/
-    script = document.createElement('script');
-    script.src = chrome.extension.getURL('upcoming.js');
-    script.onload = function () {
-      this.remove();
-    };
-    (document.head || document.documentElement).appendChild(script);
-
+    console.log(showGrades)
     if (showGrades) {
+      console.log("readech")
       /* Add Recent Grades Widget */
       var gradesXhr = new XMLHttpRequest();
       gradesXhr.open("GET", chrome.extension.getURL('grades.html'));
@@ -49,6 +56,14 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
       }
       gradesXhr.send();
     }
+
+    /*Insert Script*/
+    script = document.createElement('script');
+    script.src = chrome.extension.getURL('upcoming.js');
+    script.onload = function () {
+      this.remove();
+    };
+    (document.head || document.documentElement).appendChild(script);
   } else {
 
     if (showOnCourse) {
@@ -116,10 +131,13 @@ if (top.location.pathname.split('/')[4] == 'my_grades') {
     removeWidgets = items.removeWidgets;
     showOnCourse = items.showOnCourse;
     showGrades = items.showGrades;
-    executeOptions(removeWidgets, showOnCourse, showGrades);
+    if (!daylight) {
+      executeOptions(removeWidgets, showOnCourse, showGrades)
+    }
   });
-
-
+  if (daylight) {
+    executeOptions(removeWidgets, showOnCourse, showGrades)
+  }
   /*Insert jQuery*/
   script = document.createElement('script');
   script.src = chrome.extension.getURL('jquery-3.2.1.min.js');
