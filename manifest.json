@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "I-Learn Tools",
   "description": "View upcoming assignments widget to the I-Learn homescreen, and use a what-if calculator in the gradebook.",
   "version": "2.0.1",
