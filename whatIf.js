@@ -57,7 +57,7 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
       upXhr.onload = function () {
         if (upXhr.status == 200) {
           var upcoming = upXhr.response;
-          document.querySelector('.d2l-homepage .d2l-box:nth-child(1)').insertAdjacentHTML('afterbegin', upcoming);
+          document.querySelector('.homepage-col-8').insertAdjacentHTML('afterbegin', upcoming);
         }
       }
 
