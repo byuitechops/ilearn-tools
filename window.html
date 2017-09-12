@@ -1,94 +1,87 @@
 <style>
   #whatIf {
     background-color: #fff;
-  }
-  
-  #whatIf {
     position: absolute;
-    top: 10vh;
     width: 400px;
     min-width: 300px;
     max-width: 90vw;
     max-height: 80vh;
+    min-height: 200px;
     border-radius: 4px;
     padding: 20px 20px 40px;
-    transform: translate(-50%);
+    transform: translate(-50%, -50%);
     left: 50%;
-    top: 60px;
+    top: 50vh;
     resize: horizontal;
     box-shadow: #333 0 0 10px;
     overflow: hidden;
   }
-  
+
   #whatIf table {
     border-collapse: collapse;
     display: table;
     width: 100%;
   }
-  
+
   #whatIf tr {
-    border: solid #ccc;
-    border-width: 0 0 1px;
     margin: 0;
   }
-  
+
   #whatIf .value {
     text-align: right;
     padding: 0 30px 0 10px;
     width: 150px;
   }
-  
+
   #whatIf input {
     width: 40px;
     border: solid #888 1px;
     border-radius: 2px;
     text-align: right;
   }
-  
+
   #whatIf input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  
-  #whatIf tr:nth-child(even) {
-    background: #f1f5f9;
-  }
-  
+
   #whatIf thead,
   #whatIf tfoot {
-    background: #def;
     width: 100%;
     display: table;
-    font-size: 1.5em;
   }
-  
+
   #whatIf th {
     padding: 5px;
   }
-  
+
   #whatIf td {
-    font-size: 1.2em;
-    padding: 3px;
+    padding: 3px 5px;
   }
-  
+
   .gradeCol {
     width: 200px;
   }
-  
+
   #whatIf tbody {
     display: block;
-    max-height: calc(80vh - 140px);
+    max-height: calc(80vh - 130px);
     width: 100%;
     overflow: auto;
   }
-  
+
   #whatIf tbody tr {
     display: table;
     width: 100%;
   }
-  
+
+  .d2l-table-0>*>tr>td,
+  .d2l-table-0>*>tr>th {
+    border-right-width: 0;
+  }
+
   #close {
-    font-size: 2em;
+    font-weight: 700;
     position: absolute;
     top: 20px;
     right: 20px;
@@ -96,24 +89,27 @@
     color: #333;
     transition: .1s;
   }
-  
+
   #close:hover {
     transform: scale(1.2);
     transform: rotate(90deg);
   }
-  
+
   .extra {
     color: #5c893a;
   }
-  
+
   #whatIf p {
     margin: 2px 0 0 0;
+    font-size: 13px;
+    line-height: 14px;
+    margin: 10px 0 10px;
   }
-  
+
   .alert {
     color: #aa0000;
   }
-  
+
   #overlay {
     position: fixed;
     width: 100vw;
@@ -122,30 +118,30 @@
     left: 0;
     margin: 0;
     overflow-y: scroll;
-    z-index: 1000;
-    transition: .1s;
-  }
-  
-  #overlay.visible {
     background: rgba(0, 0, 0, .3);
   }
-  
+
+  #whatIfCont.visible {
+    display: block;
+  }
+
   #d2l_body.disabled {
     overflow-y: hidden;
     position: relative;
     right: 8px;
   }
-  
-  #overlay.hidden {
-    z-index: -100;
-    background: rgba(0, 0, 0, 0);
+
+  #whatIfCont.hidden {
+    display: none;
   }
 
 </style>
-<div id="overlay" class="hidden">
+<div id="whatIfCont" class="hidden">
+  <div id="overlay" onclick='closeWhatIf()'>
+  </div>
   <div id="whatIf">
-    <h1 class="vui-heading-1">What If?</h1>
-    <table>
+    <h3 class="vui-heading-3">What If?</h3>
+    <table class="d2l-grid d_gl x-scope d2l-table-0">
       <thead>
         <tr>
           <th>Grade Item</th>

@@ -1,51 +1,28 @@
 <style>
-  #upcoming {
-    box-shadow: 0px 2px 2px 0px #e7e7e2;
-    border-radius: 3px;
-    background: #fff;
-  }
-  
-  #upcoming .myHeading {
+  .d2l-homepage-header-wrapper {
     display: flex;
-    background: #326ba9;
-    border-radius: 3px 3px 0 0;
-    margin: 0;
-    line-height: initial;
-    font-weight: inherit;
-    color: #fff;
-    padding: 6px 10px;
+    align-items: center;
   }
-  
-  .daylight .d2l-widget {
-    padding-bottom: 5px !important;
+
+  #upcoming .d2l-widget-header .d2l-heading {
+    margin-right: 0px;
   }
-  
-  #upcoming .myHeading * {
-    color: #fff;
-    font-size: 17px;
-  }
-  
-  #upcoming td a {
-    color: #326ba9;
-    font-size: 12px;
-    line-height: normal;
-  }
-  
+
   #upcomingTable {
     table-layout: fixed;
     width: 100%;
   }
-  
+
   #upcomingTbody {
     max-height: 250px;
     overflow-y: auto;
     display: block;
     width: 100%;
   }
-  
+
   #upcoming td {
     text-align: left;
-    width: calc(35% - 20px);
+    width: calc(35% - 10px);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -54,82 +31,78 @@
     display: inline-block;
     padding: 5px 10px 4px;
   }
-  
+
   #upcoming tr {
     display: flex;
     width: 100%;
     border-bottom: 1px solid #eaeaea;
   }
-  
+
   #upcoming td:last-child {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: calc(30% - 20px);
+    width: calc(30% - 10px);
   }
-  
+
   #upcoming p {
     font-size: .8em;
     margin: 0;
     padding: 2px 10px 3px;
     color: #888;
   }
-  
+
   .available {
     color: #227700;
   }
-  
+
   #upcoming .hidden,
   #upcoming .oldAvailability {
     display: none;
   }
-  
+
   #toolbar {
     flex-grow: 1;
     text-align: right;
     position: relative;
     top: -1px;
   }
-  
-  #upcoming a.tools {
-    padding: 0 2.5px;
-    font-size: 11px;
-    vertical-align: middle;
-  }
-  
+
+  #upcoming a.tools {}
+
   #upcoming td.checkCont {
     display: inline-block;
-    width: 30px;
+    width: 25px;
     padding: 0;
     position: relative;
   }
-  
+
   #upcoming input {
     margin: 5px 0 3px 3px;
   }
-  
+
   #upcoming input:hover,
   #upcoming label:hover {
     cursor: pointer;
   }
-  
+
   #upcoming .urgent {
     background-color: #fff3ca;
   }
-  
+
   #upcoming .late {
     background-color: #ffd8d8;
     color: #aa0000;
   }
-  
+
   #upcoming tr.moreSpacing {
     padding: 5px 0;
   }
-  
+
   #upcoming .checkBoxes {
     appearance: none;
     -webkit-appearance: none;
-    margin: 4px 0 0 10px;
+    margin: 4px 0 0 5px;
     background-color: #fafafa;
     border: 1px solid #cacece;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
@@ -139,13 +112,13 @@
     position: relative;
     transition: .3s;
   }
-  
+
   #upcoming .checkBoxes:checked {
     background-color: #326ba9;
     border: 1px solid #326ba9;
     color: #fff;
   }
-  
+
   #upcoming .checkBoxes:checked:after {
     content: '\2714';
     font-size: 14px;
@@ -154,16 +127,44 @@
     left: 0.5px;
     color: #fff;
   }
-  
+
   #upcoming a:focus {
     box-shadow: none;
   }
 
 </style>
-<div id="upcoming" class="d2l-widget d2l-htmlblock">
-  <h2 class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
-    <a href="https://byui.brightspace.com/d2l/le/calendar/6606" title='View Calendar'>Upcoming Assignments</a><span id="toolbar"><a class="tools" onclick="hideRows()" href="#" title="Hide Selected Rows">Hide</a> | <a class="tools" onclick="showRows()" href="#" title="Show Hidden Rows">Show Hidden</a></span>
-  </h2>
+<div id="upcoming" class="d2l-widget">
+  <div class="d2l-widget-header">
+    <div class="d2l-homepage-header-wrapper">
+      <a href="https://byui.brightspace.com/d2l/le/calendar/6606" title='View Calendar' class="d2l-homepage-heading-link">
+        <h2 class="vui-heading-2 d2l-heading">Upcoming Assignments</h2>
+      </a>
+      <!--<a class="tools d2l-homepage-heading-link" onclick="hideRows()" href="#" title="Hide Selected Rows">
+        <h2 class="vui-heading-3 d2l-heading">Hide</h2>
+      </a>
+      <a class="tools d2l-homepage-heading-link" onclick="showRows()" href="#" title="Show Hidden Rows">
+        <h2 class="vui-heading-3 d2l-heading">Show Hidden</h2>
+      </a>-->
+
+      <!-- d2l-contextmenu-ph-hover class for hover  on the menu opener, d2l-contextmenu-opener-open for when open-->
+      <!-- remove d2.hidden class to show items -->
+      <div class="d2l-homepage-header-menu-wrapper">
+        <a class="d2l-contextmenu-ph" role="button" aria-haspopup="true" title="Hide/Show Items" aria-label="Hide/Show Items" onclick="showMenu()" href="javascript:void(0);"></a>
+        <div id="menu" class="d2l-floating-container vui-dropdown-menu d2l-hidden d2l-floating-container-autoclose" role="menu" tabindex="0" style="left: 156px; top: 33px; z-index: 1000;">
+          <ul class="d2l-contextmenu" role="presentation">
+            <li class="d2l-contextmenu-item d2l-first-visible-item" role="presentation">
+              <a class=" vui-dropdown-menu-item-link" tabindex="-1" role="menuitem" onclick="hideRows()"><span>Hide Selected Items</span></a>
+            </li>
+            <li role="separator" class="d2l-contextmenu-separator"></li>
+            <li class="d2l-contextmenu-item" role="presentation">
+              <a class=" vui-dropdown-menu-item-link" tabindex="-1" role="menuitem" onclick="showRows()"><span>Show Hidden Items</span></a>
+            </li>
+          </ul>
+        </div>
+        <div class="d2l-clear"></div>
+      </div>
+    </div>
+  </div>
   <table id="upcomingTable">
     <tbody id="upcomingTbody">
     </tbody>

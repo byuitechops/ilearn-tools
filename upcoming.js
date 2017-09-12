@@ -10,12 +10,7 @@ endDate.setDate(endDate.getDate() + 120);
 var itemsStartDate = new Date(currDate);
 itemsStartDate.setDate(itemsStartDate.getDate() - 7);
 
-var daysToShow = Number(JSON.parse(localStorage['d2l_daysToShow'])),
-  moreSpacing = JSON.parse(localStorage['d2l_moreSpacing']);
-
-if (moreSpacing) {
-  console.log("more spacing")
-}
+var daysToShow = Number(JSON.parse(localStorage['d2l_daysToShow']))
 
 var itemsEndDate = new Date(currDate);
 itemsEndDate.setDate(itemsEndDate.getDate() + daysToShow);
@@ -52,19 +47,32 @@ function getCourseIds(courses) {
   return string;
 }
 
+function sortItems(items) {
+  console.log(items)
+  return items.sort(function (a, b) {
+    return (new Date(Date.parse(a.DueDate)) - new Date(Date.parse(b.DueDate)))
+  })
+}
+
+function displayRows(items, classes) {
+  items.forEach(function (item) {
+    var itemRow = "<tr class='" + item.class + "'><td class='checkCont'><label for='" + item.ItemId + "'><input type='checkbox' id='" + item.ItemId + "' class='checkBoxes' " + item.isHidden + " onchange='updateVisibility(this)'></label></td><td><a href=" + item.ItemUrl + " title='" + item.ItemName + "' target='_blank'>" + item.ItemName + "</a></td>" + getCourse(item.OrgUnitId, classes) + "<td title='" + new Date(Date.parse(item.DueDate)).toLocaleString() + "'>" + new Date(Date.parse(item.DueDate)).toLocaleString() + "</td></tr>";
+    document.getElementById('upcomingTbody').insertAdjacentHTML('beforeend', itemRow)
+  })
+}
+
 function getItems(classes) {
   if (typeof (localStorage["d2l_assignments"]) === 'undefined') {
     localStorage['d2l_assignments'] = "{}";
   }
   var d2l_assignments = JSON.parse(localStorage['d2l_assignments']);
 
-  var items;
   var itemsxhr = new XMLHttpRequest();
   itemsxhr.open("GET", "/d2l/api/le/1.18/content/myItems/?completion=3&orgUnitIdsCSV=" + getCourseIds(classes) + "&startDateTime=" + itemsStartDate.toISOString() + "&endDateTime=" + itemsEndDate.toISOString());
   itemsxhr.onload = function () {
     if (itemsxhr.status == 200) {
-      items = JSON.parse(itemsxhr.response);
-      items.Objects.forEach(function (item) {
+      var items = JSON.parse(itemsxhr.response).Objects;
+      items.forEach(function (item) {
         if (typeof (d2l_assignments[item.ItemId]) === "undefined") {
           d2l_assignments[item.ItemId] = {
             id: item.ItemId,
@@ -72,8 +80,7 @@ function getItems(classes) {
           }
         }
 
-        var itemClass = "visible",
-          isHidden = "";
+        item.class = "visible"
         /* Check what typ of item it is*/
         if (item.DueDate === null) {
           /* if there is no due date, check if it is an availability */
@@ -81,7 +88,7 @@ function getItems(classes) {
             /* if there is no end date, set it as an availability notice */
             item.DueDate = item.StartDate;
             item.IsAvailability = true;
-            itemClass = "available"
+            item.class = "available"
           } else {
             /* if there is no due date, set it as the end date*/
             item.DueDate = item.EndDate;
@@ -91,32 +98,30 @@ function getItems(classes) {
         /* Check if the item is due today */
         if (Date.parse(item.DueDate) - currDate < 1000 * 60 * 60 * 24) {
           if (!item.IsAvailability) {
-            itemClass = "urgent";
+            item.class = "urgent";
           }
         }
 
         /* Check if item is an availability notice and hide it if it has passed */
         if (Date.parse(item.DueDate) - currDate < 0) {
           if (item.IsAvailability) {
-            itemClass = "oldAvailability";
+            item.class = "oldAvailability";
           } else {
-            itemClass = "late";
+            item.class = "late";
           }
         }
 
         if (typeof (d2l_assignments[item.ItemId]) != 'undefined') {
           if (d2l_assignments[item.ItemId].isHidden === true) {
-            itemClass += " hidden";
-            isHidden = "checked";
+            item.class += " hidden";
           }
         }
 
         if (JSON.parse(localStorage["d2l_moreSpacing"])) {
-          itemClass += ' moreSpacing';
+          item.class += 'moreSpacing';
         }
-        var itemRow = "<tr class='" + itemClass + "'><td class='checkCont'><label for='" + item.ItemId + "'><input type='checkbox' id='" + item.ItemId + "' class='checkBoxes' " + isHidden + " onchange='updateVisibility(this)'></label></td><td><a href=" + item.ItemUrl + " title='" + item.ItemName + "' target='_blank'>" + item.ItemName + "</a></td>" + getCourse(item.OrgUnitId, classes) + "<td title='" + new Date(Date.parse(item.DueDate)).toLocaleString() + "'>" + new Date(Date.parse(item.DueDate)).toLocaleString() + "</td></tr>";
-        document.getElementById('upcomingTbody').insertAdjacentHTML('beforeend', itemRow)
       });
+      displayRows(sortItems(items), classes)
       localStorage['d2l_assignments'] = JSON.stringify(d2l_assignments);
       document.getElementById('upcoming').insertAdjacentHTML('beforeend', "<p>*Assignments more that one week overdue are ommited. Quizzes with unlimited attempts will not disappear after completion</p>")
     }
@@ -149,7 +154,7 @@ function getEnrollments() {
 
 function getGrades() {
   var grades = new XMLHttpRequest();
-  grades.open("GET", "/d2l/MiniBar/6606/ActivityFeed/GetAlerts?Category=1&_d2l_prc%24headingLevel=2&_d2l_prc%24scope=&_d2l_prc%24hasActiveForm=false&isXhr=true&requestId=3");
+  grades.open("GET", "/d2l/MiniBar/6606/ActivityFeed/GetAlertsDaylight?Category=1&_d2l_prc%24headingLevel=1&_d2l_prc%24scope=&_d2l_prc%24hasActiveForm=false&isXhr=true&requestId=2");
   grades.onload = function () {
     if (grades.status == 200) {
       var response = JSON.parse(grades.response.substr(9))
@@ -157,11 +162,11 @@ function getGrades() {
       response.Data.CSS.forEach(function (each) {
         styles += " " + each.Content + " ";
       })
-      document.getElementById('gradesTbody').innerHTML = response.Payload.Html
-      document.getElementById('gradesTbody').insertAdjacentHTML('afterbegin', "<style>" + styles + "</style>")
-      document.querySelector('#gradesTbody .d2l-datalist-outdent').classList.remove('d2l-datalist-outdent')
-      document.querySelector('#gradesTbody ul').style = "padding: 0 10px;"
-      loadMore = document.querySelector('#gradesTbody a.d2l-loadmore-pager')
+      document.getElementById('gradesContainer').innerHTML = response.Payload.Html
+      document.getElementById('gradesContainer').insertAdjacentHTML('afterbegin', "<style>" + styles + "</style>")
+      document.querySelector('#gradesContainer ul').style = "padding: 0 10px;"
+      document.querySelector('#gradesContainer>div').style = "padding: 0;"
+      loadMore = document.querySelector('#gradesContainer button')
       loadMore.parentElement.removeChild(loadMore)
     }
   }
@@ -176,7 +181,13 @@ function updateVisibility(ele) {
   localStorage['d2l_assignments'] = JSON.stringify(assignments);
 }
 
+function showMenu() {
+  document.getElementById('menu').classList.remove('d2l-hidden')
+}
+
 function hideRows() {
+  document.getElementById('menu').classList.add('d2l-hidden')
+
   var assignments = JSON.parse(localStorage.getItem('d2l_assignments'));
   document.querySelectorAll('.checkBoxes').forEach(function (item) {
     if (item.checked) {
@@ -188,6 +199,8 @@ function hideRows() {
 }
 
 function showRows() {
+  document.getElementById('menu').classList.add('d2l-hidden')
+
   document.querySelectorAll('.checkBoxes').forEach(function (item) {
     if (item.checked) {
       item.parentElement.parentElement.parentElement.classList.remove('hidden');
@@ -196,7 +209,5 @@ function showRows() {
 }
 /*Fix current courses tool*/
 if (document.querySelectorAll('.row.no-gutter:not([style])').length < 3) {
-  document.querySelector('.d2l-box.d2l-box-h iframe').height = '300px';
-  document.querySelector('.d2l-box.d2l-box-h iframe').height = '300px';
-  document.querySelector('.d2l-box.d2l-box-h iframe').height = '300px';
+  //  document.querySelector('.d2l-box.d2l-box-h iframe').height = '300px';
 }

@@ -4,8 +4,8 @@ var ou = top.location.search.split('=')[1],
   den = 0;
 
 function whatIf() {
-  document.getElementById('overlay').classList.toggle("hidden");
-  document.getElementById('overlay').classList.toggle("visible");
+  document.getElementById('whatIfCont').classList.toggle("hidden");
+  document.getElementById('whatIfCont').classList.toggle("visible");
   document.querySelector('body').classList.toggle('disabled');
   if (document.getElementById('grade').innerText == "") {
     getSetup();
@@ -180,7 +180,7 @@ function getGrade(perc) {
 }
 
 function closeWhatIf() {
-  document.getElementById('overlay').classList.toggle("hidden");
-  document.getElementById('overlay').classList.toggle("visible");
+  document.getElementById('whatIfCont').classList.toggle("hidden");
+  document.getElementById('whatIfCont').classList.toggle("visible");
   document.querySelector('body').classList.toggle('disabled');
 }

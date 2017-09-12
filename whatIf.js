@@ -1,28 +1,17 @@
 /*eslint-env browser*/
 /*global chrome*/
 var script;
-var daylight = document.querySelector('body').classList.contains('daylight');
 
 function executeOptions(removeWidgets, showOnCourse, showGrades) {
-
   if (typeof top.location.pathname.split('/')[3] === 'undefined') {
     if (removeWidgets) {
-      console.log(removeWidgets)
       var courses, calendar
-      if (daylight) {
-        calendar = document.querySelector('.homepage-col-4 .d2l-widget:nth-child(2)').parentElement.parentElement.parentElement.parentElement;
-        console.log(calendar)
-        calendar.parentElement.removeChild(calendar)
-      } else {
-        courses = document.querySelectorAll('[title="Collapse My Courses"]')[1].parentElement.parentElement.parentElement.parentElement;
-        calendar = document.querySelectorAll('[title="Actions for Calendar"]')[0].parentElement.parentElement.parentElement
-        console.log(courses)
-        console.log(calendar)
-        /* Delete redundant modules if you choose */
-        courses.parentElement.removeChild(courses)
-        calendar.parentElement.removeChild(calendar)
-      }
+      courses = document.querySelector('[title="Actions for My Courses"]').parentElement.parentElement.parentElement;
+      calendar = document.querySelector('[title="Actions for Calendar"]').parentElement.parentElement.parentElement
 
+      /* Delete redundant modules if you choose */
+      courses.parentElement.removeChild(courses)
+      calendar.parentElement.removeChild(calendar)
     }
 
     /* Add Upcoming Assignments Widget */
@@ -31,25 +20,20 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
     upXhr.onload = function () {
       if (upXhr.status == 200) {
         var upcoming = upXhr.response;
-        if (daylight) {
-          document.querySelector('.homepage-col-8').insertAdjacentHTML('afterbegin', upcoming);
-        } else {
-          document.querySelector('.d2l-homepage .d2l-box:nth-child(1)').insertAdjacentHTML('afterbegin', upcoming);
-        }
+        document.querySelector('.homepage-col-8').insertAdjacentHTML('afterbegin', upcoming);
+
       }
     }
     upXhr.send();
 
-    console.log(showGrades)
     if (showGrades) {
-      console.log("readech")
       /* Add Recent Grades Widget */
       var gradesXhr = new XMLHttpRequest();
       gradesXhr.open("GET", chrome.extension.getURL('grades.html'));
       gradesXhr.onload = function (e) {
         if (gradesXhr.status == 200) {
           var grades = gradesXhr.response;
-          document.querySelector('.d2l-homepage .d2l-box:nth-child(2)').insertAdjacentHTML('afterbegin', grades);
+          document.querySelector('.d2l-homepage .homepage-col-4').insertAdjacentHTML('afterbegin', grades);
         } else {
           console.log(e);
         }
@@ -94,7 +78,7 @@ function executeOptions(removeWidgets, showOnCourse, showGrades) {
 if (top.location.pathname.split('/')[4] == 'my_grades') {
 
   document.querySelector('form').style = "position: relative";
-  document.querySelector('form').insertAdjacentHTML('afterbegin', "<a id='whatif' class='dhdg_1 vui-heading-2' style='position: absolute; right: 0; font-size: 1.5em; background: #326ba9; color: #fff; padding: 8px 10px; border-radius: 5px;' onclick=whatIf() href='#'>What if?</a>");
+  document.querySelector('form').insertAdjacentHTML('afterbegin', "<a id='whatif' class='dhdg_1 vui-heading-2' style='position: absolute; right: 0; font-size: 16px; background: #f9fafb; color: #565a5c; padding: 3px 10px; border:1px solid #d3d9e3; border-radius: 5px; text-decoration: none;' title='Open what if calculator' onclick='whatIf()' href='#'>What if?</a>");
 
   var windowUrl = chrome.extension.getURL('window.html');
   xhr = new XMLHttpRequest();
@@ -131,13 +115,8 @@ if (top.location.pathname.split('/')[4] == 'my_grades') {
     removeWidgets = items.removeWidgets;
     showOnCourse = items.showOnCourse;
     showGrades = items.showGrades;
-    if (!daylight) {
-      executeOptions(removeWidgets, showOnCourse, showGrades)
-    }
-  });
-  if (daylight) {
     executeOptions(removeWidgets, showOnCourse, showGrades)
-  }
+  });
   /*Insert jQuery*/
   script = document.createElement('script');
   script.src = chrome.extension.getURL('jquery-3.2.1.min.js');

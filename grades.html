@@ -1,78 +1,16 @@
 <style>
-  #grades {
-    box-shadow: 0px 2px 2px 0px #e7e7e2;
-    border-radius: 3px;
-    background: #fff;
-  }
-  
-  #grades .myHeading {
-    background: #326ba9;
-    border-radius: 3px 3px 0 0;
-    margin: 0;
-    line-height: initial;
-    font-weight: inherit;
-    color: #fff;
-  }
-  
-  #gradesTable {
-    table-layout: fixed;
-    width: 100%;
-  }
-  
-  #gradesTbody {
-    max-height: 265px;
-    overflow-y: auto;
-    width: 100%;
-  }
-  
-  #grades tr {
-    width: 100%;
-    border-bottom: 1px solid #eaeaea;
-    display: flex;
-  }
-  
-  #grades th {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding: 3px 10px;
-    font-size: 1.1em;
-    background: #eee;
-    border: solid #d8d8d8;
-    border-width: 1px 0 0 0;
-  }
-  
-  #grades th:first-child,
-  #grades td:first-child {
-    flex-grow: 1;
-  }
-  
-  #grades th,
-  #grades td {
-    padding: 5px 10px 3px;
-    font-size: 1.1em;
-  }
-  
-  #grades td {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  
-  .d2l-widget-header {
-    padding: 8px 10px 6px;
-  }
-  
-  #grades a:focus {
-    box-shadow: none;
+  #grades .d2l-datalist-item-content {
+    padding-left: 0px;
   }
 
 </style>
-<div id="grades" class="d2l-widget d2l-htmlblock">
-  <h2 class="vui-heading-2 myHeading d2l-heading d2l-widget-header">
-    Recent Grades
-  </h2>
-  <table id="gradesTable">
-    <tbody id="gradesTbody"></tbody>
-  </table>
+
+<div id="grades" class="d2l-widget">
+  <div class="d2l-widget-header">
+    <div class="homepage-header-wrapper">
+      <h2 class="vui-heading-2 d2l-heading ">Recent Grades</h2>
+    </div>
+  </div>
+  <div id="gradesContainer">
+  </div>
 </div>
